@@ -1,0 +1,42 @@
+[
+    {
+        "car_id": "1001",
+        "brand": "Toyota",
+        "model": "Corolla",
+        "seating_capacity": 5,
+        "rental_price": 50.0,
+        "available": true
+    },
+    {
+        "car_id": "1002",
+        "brand": "Honda",
+        "model": "Civic",
+        "seating_capacity": 5,
+        "rental_price": 55.0,
+        "available": true
+    },
+    {
+        "car_id": "1003",
+        "brand": "Ford",
+        "model": "Mustang",
+        "seating_capacity": 4,
+        "rental_price": 85.0,
+        "available": true
+    },
+    {
+        "car_id": "1004",
+        "brand": "Tesla",
+        "model": "Model 3",
+        "seating_capacity": 5,
+        "rental_price": 95.0,
+        "available": true
+    },
+    {
+        "car_id": "1005",
+        "brand": "BMW",
+        "model": "X5",
+        "seating_capacity": 7,
+        "rental_price": 120.0,
+        "available": true
+    }
+]
