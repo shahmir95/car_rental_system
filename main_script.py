@@ -5,6 +5,34 @@ from models.rental import RentalManager
 import json
 import os
 import time
+from getpass import getpass
+import sys
+import os
+import msvcrt
+
+
+def get_password(prompt="Password: "):
+    """Reads password from user input with * display"""
+    print(prompt, end='', flush=True)
+    password = ''
+    
+    if os.name == 'nt':
+        while True:
+            char = msvcrt.getch()
+            if char in {b'\r', b'\n'}:
+                print('')
+                break
+            elif char == b'\x08':  # Backspace
+                if len(password) > 0:
+                    password = password[:-1]
+                    print('\b \b', end='', flush=True)
+            elif char == b'\x03':  # Ctrl+C
+                raise KeyboardInterrupt
+            else:
+                password += char.decode('utf-8', errors='ignore')
+                print('*', end='', flush=True)
+    
+    return password
 
 # Helper functions for file management
 def load_users():
@@ -96,45 +124,35 @@ def main_menu():
             print("Invalid choice. Please select 1, 2, 3, or 4.")
 
 def register():
-    """Register a new user (customer or admin)"""
-    print("\n=== REGISTRATION ===")
-    
-    while True:
-        role = input("Register as (admin/customer): ").lower()
-        if role in ['admin', 'customer']:
-            break
-        print("Invalid role. Please enter 'admin' or 'customer'.")
+    """Register a new customer only"""
+    print("\n=== CUSTOMER REGISTRATION ===")
     
     username = input("Create username: ")
-    password = input("Create password: ")
+    password = get_password("Create password: ")
     first_name = input("First name: ")
     last_name = input("Last name: ")
     
-    if role == "admin":
-        admin = Admin(username, password, first_name, last_name)
-        Admin.save_admin(admin)
-    elif role == "customer":
-        try:
-            balance = float(input("Enter starting balance: $"))
-            if balance < 0:
-                print("Balance cannot be negative. Using $0 as starting balance.")
-                balance = 0.0
-                
-            customer = Customer(username, password, first_name, last_name, balance)
-            success = save_user(customer)
+    try:
+        balance = float(input("Enter starting balance: $"))
+        if balance < 0:
+            print("Balance cannot be negative. Using $0 as starting balance.")
+            balance = 0.0
             
-            if success:
-                print(f"Welcome, {first_name}! Your account has been created.")
-                time.sleep(1)
-        except ValueError:
-            print("Invalid balance amount. Please enter a number.")
+        customer = Customer(username, password, first_name, last_name, balance)
+        success = save_user(customer)
+        
+        if success:
+            print(f"Welcome, {first_name}! Your account has been created.")
+            time.sleep(1)
+    except ValueError:
+        print("Invalid balance amount. Please enter a number.")
 
 def login():
     """Handle user login for both admin and customer"""
     print("\n=== LOGIN ===")
     
     username = input("Username: ")
-    password = input("Password: ")
+    password = get_password("Password: ")
     
     # Check admin login first
     admins = Admin.load_admins()
